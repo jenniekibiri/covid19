@@ -26,20 +26,18 @@ function computeImpact() {
   }
   const currentlyInfected = data.reportedCases * 10;
   const factor = Math.trunc(days / 3);
-  const infectionsByRequestedTime = currentlyInfected * (2 ** factor);
-  const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
+  // eslint-disable-next-line no-restricted-properties
+  const infectionsByRequestedTime = currentlyInfected * Math.pow(2, factor);
 
   const output = {
-    currentlyInfected,
-    infectionsByRequestedTime,
-    severeCasesByRequestedTime
+    infectionsByRequestedTime
 
   };
   return output;
 }
 
 function computeSevereImpact() {
-  const currentlyInfected = input.reportedCases * 50;
+  const currentlyInfected = data.reportedCases * 50;
   // eslint-disable-next-line no-unused-vars
   let days;
   const duration = data.timeToElapse;
@@ -52,14 +50,12 @@ function computeSevereImpact() {
   if (data.periodType === 'months') {
     days = duration * 30;
   }
-  // const factor = Math.trunc(days / 3);
-  const infectionsByRequestedTime = currentlyInfected * 10;
-  const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
+  const factor = Math.trunc(days / 3);
+  // eslint-disable-next-line no-restricted-properties
+  const infectionsByRequestedTime = currentlyInfected * Math.pow(2, factor);
 
   const output = {
-    currentlyInfected,
-    infectionsByRequestedTime,
-    severeCasesByRequestedTime
+    infectionsByRequestedTime
 
   };
   return output;
@@ -67,8 +63,8 @@ function computeSevereImpact() {
 const covid19ImpactEstimator = () => {
   const output = {
     data: input,
-    impact: computeImpact(data),
-    severeImpact: computeSevereImpact(data)
+    impact: computeImpact(),
+    severeImpact: computeSevereImpact()
   };
   return output;
 };
