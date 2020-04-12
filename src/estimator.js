@@ -26,7 +26,7 @@ function computeImpact() {
   if (data.periodType === 'months') {
     days = duration * 30;
   }
-  const factor = Math.trunc(days / 3);
+  const factor = Math.floor(days / 3);
   const power = 2 ** factor;
   const infections = currentlyInfected * power;
   const infectionsByRequestedTime = infections;
@@ -56,7 +56,7 @@ function computeSevereImpact() {
     days = duration * 30;
     return days;
   }
-  const factor = Math.trunc(days / 3);
+  const factor = Math.floor(days / 3);
   const power = 2 ** factor;
   const infections = currentlyInfected * power;
   const infectionsByRequestedTime = infections;
