@@ -11,9 +11,10 @@ const data = {
   population: 66622705,
   totalHospitalBeds: 1380614
 };
-const currentlyInfected = data.reportedCases * 10;
-const currentlyInfectedSevere = data.reportedCases * 50;
+
 function computeImpact() {
+  const currentlyInfected = data.reportedCases * 10;
+  const currentlyInfectedSevere = data.reportedCases * 50;
   let days = null;
   const duration = data.timeToElapse;
   if (data.periodType === 'days') {
@@ -26,19 +27,24 @@ function computeImpact() {
     days = duration * 30;
   }
   const factor = Math.trunc(days / 3);
-  const infectionsByRequestedTime = currentlyInfected * (2 ** factor);
-  const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
+  const infectionsByRequestedTimeImpact = currentlyInfected * (2 ** factor);
+  const infectionsByRequestedTimeSevere = currentlyInfectedSevere * (2 ** factor);
+  const severeCasesByRequestedTimeImpact = 0.15 * infectionsByRequestedTimeImpact;
+  const severeCasesByRequestedTimeSevere = 0.15 * infectionsByRequestedTimeSevere;
   const output = {
-    infectionsByRequestedTime,
+    infectionsByRequestedTimeImpact,
+    infectionsByRequestedTimeSevere,
     currentlyInfected,
-    severeCasesByRequestedTime
+    currentlyInfectedSevere,
+    severeCasesByRequestedTimeImpact,
+    severeCasesByRequestedTimeSevere
 
   };
   return output;
 }
 
 
-const covid19ImpactEstimator = () => {
+const covid19ImpactEstimator = (currentlyInfected, currentlyInfectedSevere) => {
   const output = {
     data,
     impact: computeImpact(currentlyInfected, data),
