@@ -54,5 +54,6 @@ app.post('/json', (req, res) => {
 
   res.status(200).json(data);
 });
-//  const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000;
+// eslint-disable-next-line no-console
+app.listen(PORT, () => console.log(`server running on port ${PORT}`));
