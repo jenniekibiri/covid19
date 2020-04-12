@@ -13,8 +13,24 @@ const data = {
 };
 
 function computeImpact(currentlyInfected) {
+  let days = null;
+  const duration = data.timeToElapse;
+  if (data.periodType === 'days') {
+    days = duration;
+  }
+  if (data.periodType === 'weeks') {
+    days = duration * 7;
+  }
+  if (data.periodType === 'months') {
+    days = duration * 30;
+  }
+  const factor = Math.trunc(days / 3);
+  const infectionsByRequestedTime = currentlyInfected * (2 ** factor);
+  const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
   const output = {
-    currentlyInfected
+    infectionsByRequestedTime,
+    currentlyInfected,
+    severeCasesByRequestedTime
 
   };
   return output;
