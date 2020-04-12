@@ -5,7 +5,9 @@ const estimator = require('../estimator.js');
 const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.get('/', (req, res) => {
+  res.send('hello sever');
+});
 app.post('/api/v1/on-covid-19', (req, res) => {
   const {
     // eslint-disable-next-line max-len
