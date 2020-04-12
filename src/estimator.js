@@ -8,7 +8,7 @@ const covid19ImpactEstimator = (data) => {
   // Get factor
   let estimate;
   if (periodType === 'months') {
-    estimate = timeToElapse * 30;
+    estimate = Math.ceil(timeToElapse * 30);
   } else if (periodType === 'weeks') {
     estimate = timeToElapse * 7;
   } else {
