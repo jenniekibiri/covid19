@@ -13,7 +13,9 @@ const input = {
 };
 const data = input;
 function computeImpact() {
-  let days = 58;
+  const currentlyInfected = data.reportedCases * 10;
+
+  let days = null;
   const duration = data.timeToElapse;
   if (data.periodType === 'days') {
     days = duration;
@@ -24,38 +26,45 @@ function computeImpact() {
   if (data.periodType === 'months') {
     days = duration * 30;
   }
-  const currentlyInfected = data.reportedCases * 10;
   const factor = Math.trunc(days / 3);
-  // eslint-disable-next-line no-restricted-properties
-  const infectionsByRequestedTime = currentlyInfected * Math.pow(2, factor);
+  const power = 2 ** factor;
+  const infections = currentlyInfected * power;
+  const infectionsByRequestedTime = infections;
+  const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
 
   const output = {
-    infectionsByRequestedTime
+    currentlyInfected,
+    infectionsByRequestedTime,
+    severeCasesByRequestedTime
 
   };
   return output;
 }
-
 function computeSevereImpact() {
-  const currentlyInfected = data.reportedCases * 50;
-  // eslint-disable-next-line no-unused-vars
-  let days;
+  const currentlyInfected = input.reportedCases * 50;
+  let days = null;
   const duration = data.timeToElapse;
   if (data.periodType === 'days') {
     days = duration;
+    return days;
   }
   if (data.periodType === 'weeks') {
     days = duration * 7;
+    return days;
   }
   if (data.periodType === 'months') {
     days = duration * 30;
+    return days;
   }
+
   const factor = Math.trunc(days / 3);
-  // eslint-disable-next-line no-restricted-properties
-  const infectionsByRequestedTime = currentlyInfected * Math.pow(2, factor);
+  const infectionsByRequestedTime = currentlyInfected * (2 ** factor);
+  const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
 
   const output = {
-    infectionsByRequestedTime
+    currentlyInfected,
+    infectionsByRequestedTime,
+    severeCasesByRequestedTime
 
   };
   return output;
@@ -68,6 +77,5 @@ const covid19ImpactEstimator = () => {
   };
   return output;
 };
-
 
 export default covid19ImpactEstimator;
