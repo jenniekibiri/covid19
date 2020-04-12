@@ -1,3 +1,7 @@
+/* eslint-disable no-use-before-define */
+
+import covid19ImpactEstimator from '../estimator';
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const estimator = require('../estimator.js');
@@ -48,6 +52,9 @@ app.post('/json', (req, res) => {
     population: 66622705,
     totalHospitalBeds: 1380614
   };
+  const output = covid19ImpactEstimator(data);
+  res.type('application/json');
+  res.status(200).json(output);
 
 
   const data = estimator(inputData);
