@@ -42,7 +42,7 @@ const covid19ImpactEstimator = (data) => {
   impact.severeCasesByRequestedTime = severeCases;
   impact.hospitalBedsByRequestedTime = hospitalBeds;
   impact.casesForICUByRequestedTime = Math.trunc(casesForICU);
-  impact.casesForVentilatorsByRequestedTime = Math.ceil(casesForVentilators);
+  impact.casesForVentilatorsByRequestedTime = (casesForVentilators);
   impact.dollarsInFlight = Math.trunc(moneyLoss);
 
   severeImpact.currentlyInfected = getCases(reportedCases, 50);
