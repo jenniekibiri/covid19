@@ -1,24 +1,31 @@
 const express = require('express');
-
+const bodyParser = require('body-parser');
 const estimator = require('../estimator.js');
 
-const route = express.Router();
-route.get('/', (req, res) => {
-  res.send('Hello Evans');
+const app = express();
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.get('/', (req, res) => {
+  res.send('Hello server');
 });
-route.post('/', (req, res) => {
+app.post('/api/v1/on-covid-19', (req, res) => {
+  const {
+    // eslint-disable-next-line max-len
+    name, avgAge, avgDailyIncomeInUSD, avgDailyIncomePopulation, periodType, timeToElapse, reportedCases, population, totalHospitalBeds
+  } = req.body;
+
   const inputData = {
     region: {
-      name: req.body.region.name,
-      avgAge: req.body.region.avgAge,
-      avgDailyIncomeInUSD: req.body.region.avgDailyIncomeInUSD,
-      avgDailyIncomePopulation: req.body.region.avgDailyIncomePopulation
+      name,
+      avgAge,
+      avgDailyIncomeInUSD,
+      avgDailyIncomePopulation
     },
-    periodType: req.body.periodType,
-    timeToElapse: req.body.timeToElapse,
-    reportedCases: req.body.reportedCases,
-    population: req.body.population,
-    totalHospitalBeds: req.body.totalHospitalBeds
+    periodType,
+    timeToElapse,
+    reportedCases,
+    population,
+    totalHospitalBeds
   };
 
 
@@ -26,7 +33,7 @@ route.post('/', (req, res) => {
 
   res.status(200).json(data);
 });
-route.post('/json', (req, res) => {
+app.post('/json', (req, res) => {
   const inputData = {
     region: {
       name: 'Africa',
@@ -46,5 +53,5 @@ route.post('/json', (req, res) => {
 
   res.status(200).json(data);
 });
-
-module.exports = route;
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`server running on port ${PORT}`));
