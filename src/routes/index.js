@@ -1,51 +1,38 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const estimator = require('../estimator.js');
 
-// import covid19ImpactEstimator from './estimator';
-// import xml from 'xml';
+const app = express();
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-const path = require('path');
-const covid19ImpactEstimator = require('../estimator');
-const xmlParser = require('./fast-xml-parser');
+app.post('/api/v1/on-covid-19', (req, res) => {
+  const {
+    // eslint-disable-next-line max-len
+    name, avgAge, avgDailyIncomeInUSD, avgDailyIncomePopulation, periodType, timeToElapse, reportedCases, population, totalHospitalBeds
+  } = req.body;
 
-const appRoot = path.dirname(require.main.filename); // will fail if using a launcher like pm2
+  const inputData = {
+    region: {
+      name,
+      avgAge,
+      avgDailyIncomeInUSD,
+      avgDailyIncomePopulation
+    },
+    periodType,
+    timeToElapse,
+    reportedCases,
+    population,
+    totalHospitalBeds
+  };
 
-exports.evalCovidJSON = (req, res, next) => {
-  try {
-    const data = req.body;
-    if (data == null) {
-      res.sendStatus(400); return;
-    }
-    const output = covid19ImpactEstimator(data);
-    res.type('application/json');
-    res.status(200).json(output);
-  } catch (error) {
-    next(error);
-  }
-};
 
-exports.evalCovidXML = (req, res, next) => {
-  try {
-    const data = req.body;
-    if (data == null) {
-      res.sendStatus(400); return;
-    }
-    const output = covid19ImpactEstimator(data);
-    // xml requires that there is only a single root element
-    const xmlOutput = xmlParser.parse({ root: output });
-    res.set('Content-Type', 'application/xml');
-    res.status(200);
-    res.send(xmlOutput);
-  } catch (error) {
-    next(error);
-  }
-};
+  const data = estimator(inputData);
 
-exports.getLogs = (req, res) => {
-  res.status(200);
-  res.sendFile(`${appRoot}/logs/app.log`);
-};
-
-exports.getXML = (req, res) => {
-  const data = {
+  res.status(200).json(data);
+});
+app.post('/json', (req, res) => {
+  const inputData = {
     region: {
       name: 'Africa',
       avgAge: 19.7,
@@ -58,8 +45,11 @@ exports.getXML = (req, res) => {
     population: 66622705,
     totalHospitalBeds: 1380614
   };
-  const xmlOutput = xmlParser.parse({ root: data });
-  res.set('Content-Type', 'application/xml');
-  res.status(200);
-  res.send(xmlOutput);
-};
+
+
+  const data = estimator(inputData);
+
+  res.status(200).json(data);
+});
+//  const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`server running on port ${PORT}`));
