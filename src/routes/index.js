@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.send('hello sever');
 });
-app.post('/api/v1/on-covid-19', (req, res) => {
+app.post('/api/v1/on-covid-19/json', (req, res) => {
   const {
     // eslint-disable-next-line max-len
     name, avgAge, avgDailyIncomeInUSD, avgDailyIncomePopulation
