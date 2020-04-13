@@ -2,17 +2,46 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
+const fs = require('fs');
+const morgan = require('morgan');
 const covid19ImpactEstimator = require('../estimator.js');
 const estimator = require('../estimator.js');
 const xmlParser = require('./fast-xml-parser');
 
-
 const app = express();
+const writeStream = fs.createWriteStream(
+  path.join(__dirname, '/logs/app.log'), { flags: 'a', encoding: 'utf8' }
+);
+const logFormat = ':method\t:url\t:status\t:response-time';
+app.use(morgan(logFormat, {
+  stream: {
+    write(message) {
+      const finalIndex = message.length - 1;
+      const lastTabIndex = message.lastIndexOf('\t');
+      const str = message.substring(lastTabIndex + 1, finalIndex);
+      let time = Math.ceil(parseFloat(str));
+      if (time < 10) {
+        time = `0${time.toString()}`;
+      } else {
+        time = time.toString();
+      }
+      const msg = `${message.substring(0, lastTabIndex + 1)}${time}ms\n`;
+      writeStream.write(msg);
+    }
+  }
+}));
+const appRoot = path.dirname(require.main.filename);
+
+
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.send('hello sever');
+});
+app.get('/', (req, res) => {
+  res.send('hello');
 });
 app.post('/api/v1/on-covid-19', (req, res) => {
   const {
@@ -107,7 +136,28 @@ app.post('/api/v1/on-covid-19/xml', (req, res) => {
   res.status(200);
   res.send(xmlOutput);
 });
+app.get('/api/v1/on-covid-19/', (req, res) => {
+  res.status(200);
+  res.sendFile(`${appRoot}/logs/app.log`);
+});
+app.get('/api/v1/on-covid-19/json', (req, res) => {
+  res.status(200);
+  res.sendFile(`${appRoot}/logs/app.log`);
+});
+app.get('/api/v1/on-covid-19/xml', (req, res) => {
+  res.status(200);
+  res.sendFile(`${appRoot}/logs/app.log`);
+});
+app.get('/logs', (req, res) => {
+  res.status(200);
+  res.sendFile(`${appRoot}/logs/app.log`);
+});
 
+
+exports.getLogs = (req, res) => {
+  res.status(200);
+  res.sendFile(`${appRoot}/logs/app.log`);
+};
 app.post('/json', (req, res) => {
   const inputData = {
     region: {
