@@ -17,7 +17,7 @@ app.post('/api/v1/on-covid-19', (req, res) => {
   const {
     // eslint-disable-next-line max-len
     name, avgAge, avgDailyIncomeInUSD, avgDailyIncomePopulation
-  } = req.body;
+  } = req.body.region;
   const {
     periodType, timeToElapse, reportedCases, population, totalHospitalBeds
   } = req.body;
