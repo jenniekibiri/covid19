@@ -14,8 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.send('hello sever');
 });
-
-app.post('/api/v1/on-covid-19/', (req, res) => {
+app.post('/api/v1/on-covid-19', (req, res) => {
   const {
     // eslint-disable-next-line max-len
     name, avgAge, avgDailyIncomeInUSD, avgDailyIncomePopulation
@@ -41,9 +40,9 @@ app.post('/api/v1/on-covid-19/', (req, res) => {
   const data = estimator(inputData);
   // const output = covid19ImpactEstimator();
   res.type('application/json');
+  res.set('Content-Type', 'application/json');
   res.status(200).json(data);
 });
-
 app.post('/api/v1/on-covid-19/xml', (req, res) => {
   const {
     // eslint-disable-next-line max-len
@@ -68,6 +67,10 @@ app.post('/api/v1/on-covid-19/xml', (req, res) => {
 
 
   const data = estimator(inputData);
+  // const output = covid19ImpactEstimator();
+  // res.type('application/json');
+  // res.set('Content-Type', 'application/json');
+  // res.status(200).json(data);
   const xmlOutput = xmlParser.parse({ root: data });
   res.set('Content-Type', 'application/xml');
   res.status(200);
