@@ -9,7 +9,7 @@ const xmlParser = require('./fast-xml-parser');
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.send('hello sever');
@@ -43,6 +43,37 @@ app.post('/api/v1/on-covid-19', (req, res) => {
   res.set('Content-Type', 'application/json');
   res.status(200).json(data);
 });
+
+app.post('/api/v1/on-covid-19/json', (req, res) => {
+  const {
+    // eslint-disable-next-line max-len
+    name, avgAge, avgDailyIncomeInUSD, avgDailyIncomePopulation
+  } = req.body.region;
+  const {
+    periodType, timeToElapse, reportedCases, population, totalHospitalBeds
+  } = req.body;
+  const inputData = {
+    region: {
+      name,
+      avgAge,
+      avgDailyIncomeInUSD,
+      avgDailyIncomePopulation
+    },
+    periodType,
+    timeToElapse,
+    reportedCases,
+    population,
+    totalHospitalBeds
+  };
+
+
+  const data = estimator(inputData);
+  // const output = covid19ImpactEstimator();
+  res.type('application/json');
+
+  res.status(200).json(data);
+});
+
 app.post('/api/v1/on-covid-19/xml', (req, res) => {
   const {
     // eslint-disable-next-line max-len
