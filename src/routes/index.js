@@ -1,9 +1,8 @@
 /* eslint-disable no-use-before-define */
 
-import covid19ImpactEstimator from '../estimator';
-
 const express = require('express');
 const bodyParser = require('body-parser');
+const covid19ImpactEstimator = require('../estimator.js');
 const estimator = require('../estimator.js');
 
 
