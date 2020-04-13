@@ -136,7 +136,7 @@ app.post('/api/v1/on-covid-19/xml', (req, res) => {
   res.status(200);
   res.send(xmlOutput);
 });
-app.get('/api/v1/on-covid-19/', (req, res) => {
+app.get('/api/v1/on-covid-19/logs', (req, res) => {
   res.status(200);
   res.sendFile(`${appRoot}/logs/app.log`);
 });
