@@ -7,7 +7,7 @@ const appRoot = path.dirname(require.main.filename); // will fail if using a lau
 const options = {
   file: {
     // level: 'info',
-    filename: `${appRoot}/logs/app.log`,
+    filename: `${appRoot}/src/routes/logs/app.log`,
     handleExceptions: false,
     json: false,
     maxsize: 5242880, // 5MB
