@@ -5,13 +5,13 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
 const morgan = require('morgan');
-const covid19ImpactEstimator = require('../estimator.js');
-const estimator = require('../estimator.js');
-const xmlParser = require('./fast-xml-parser');
+const covid19ImpactEstimator = require('./src/estimator.js');
+const estimator = require('./src/estimator.js');
+const xmlParser = require('./src/routes/fast-xml-parser');
 
 const app = express();
 const writeStream = fs.createWriteStream(
-  path.join(__dirname, '/logs/app.log'), { flags: 'a', encoding: 'utf8' }
+  path.join(__dirname, 'src/routes/logs/app.log'), { flags: 'a', encoding: 'utf8' }
 );
 const logFormat = ':method\t:url\t:status\t:response-time';
 app.use(morgan(logFormat, {
@@ -138,26 +138,22 @@ app.post('/api/v1/on-covid-19/xml', (req, res) => {
 });
 app.get('/api/v1/on-covid-19/logs', (req, res) => {
   res.status(200);
-  res.sendFile(`${appRoot}/logs/app.log`);
+  res.sendFile(`${appRoot}/src/routes/logs/app.log`);
 });
 app.get('/api/v1/on-covid-19/json', (req, res) => {
   res.status(200);
-  res.sendFile(`${appRoot}/logs/app.log`);
+  res.sendFile(`${appRoot}/src/routes/logs/app.log`);
 });
 app.get('/api/v1/on-covid-19/xml', (req, res) => {
   res.status(200);
-  res.sendFile(`${appRoot}/logs/app.log`);
+  res.sendFile(`${appRoot}/src/routes/logs/app.log`);
 });
 app.get('/logs', (req, res) => {
   res.status(200);
-  res.sendFile(`${appRoot}/logs/app.log`);
+  res.sendFile(`${appRoot}/src/routes/logs/app.log`);
 });
 
 
-exports.getLogs = (req, res) => {
-  res.status(200);
-  res.sendFile(`${appRoot}/logs/app.log`);
-};
 app.post('/json', (req, res) => {
   const inputData = {
     region: {
