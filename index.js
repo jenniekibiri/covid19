@@ -5,9 +5,9 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
 const morgan = require('morgan');
-const covid19ImpactEstimator = require('../estimator.js');
-const estimator = require('../estimator.js');
-const xmlParser = require('./fast-xml-parser');
+const covid19ImpactEstimator = require('./src/estimator.js');
+const estimator = require('./src/estimator.js');
+const xmlParser = require('./src/routes/fast-xml-parser');
 
 const app = express();
 const writeStream = fs.createWriteStream(
